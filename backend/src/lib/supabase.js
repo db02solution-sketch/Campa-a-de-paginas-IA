@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { memory } from '../store/memory.js';
+import { memory } from './store/memory.js';
 
 const url = process.env.SUPABASE_URL?.trim();
 const serviceKey =

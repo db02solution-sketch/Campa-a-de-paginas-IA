@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import publicRoutes from './routes/public.js';
 import adminRoutes from './routes/admin.js';
-import { useMemory, getSupabaseStatus } from '../lib/supabase.js';
+import { useMemory, getSupabaseStatus } from './lib/supabase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
-import { getStore, supabase, useMemory } from '../lib/supabase.js';
-import { padNumber } from '../store/memory.js';
+import { getStore, supabase, useMemory } from './lib/supabase.js';
+import { padNumber } from './store/memory.js';
 
 export function formatNumber(value, digits) {
   return padNumber(value, digits);

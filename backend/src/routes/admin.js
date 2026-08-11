@@ -1,24 +1,24 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { requireAdmin } from '../middleware/admin.js';
+import { requireAdmin } from './middleware/admin.js';
 import {
   listCampaigns,
   createCampaign,
   updateCampaign,
   getCampaignById
-} from '../services/campaigns.js';
-import { listLeads, listProposals, listAgencyInquiries } from '../services/leads.js';
-import { generateNumberPool, assignNumbers } from '../services/numbers.js';
-import { getStore, useMemory } from '../lib/supabase.js';
-import { recommendPackage, buildProposalMessage } from '../services/proposals.js';
-import { supabase } from '../lib/supabase.js';
+} from './services/campaigns.js';
+import { listLeads, listProposals, listAgencyInquiries } from './services/leads.js';
+import { generateNumberPool, assignNumbers } from './services/numbers.js';
+import { getStore, useMemory } from './lib/supabase.js';
+import { recommendPackage, buildProposalMessage } from './services/proposals.js';
+import { supabase } from './lib/supabase.js';
 import {
   listAdmins,
   createAdminUser,
   updateAdminUser,
   deleteAdminUser,
   createInitialAdmin
-} from '../services/admin.js';
+} from './services/admin.js';
 
 const router = Router();
 router.use(requireAdmin);
