@@ -14,6 +14,7 @@ const __dirname = path.dirname(__filename);
 function resolveFrontendDistPath() {
   const candidates = [
     path.join(__dirname, '..', '..', 'frontend', 'build'),
+    path.join(process.cwd(), 'build'),
     path.join(process.cwd(), 'frontend', 'build'),
     path.join(process.cwd(), '..', 'frontend', 'build')
   ];

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: campa-a-de-paginas-ia
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build && npm install --prefix backend
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001

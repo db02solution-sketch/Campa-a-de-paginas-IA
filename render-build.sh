@@ -14,4 +14,10 @@ npm install
 npm run build
 cd ..
 
+# Instalar dependencias del backend
+echo "📦 Instalando dependencias del backend..."
+cd backend
+npm install
+cd ..
+
 echo "✅ Build completado"
