@@ -1,6 +1,7 @@
 import './loadEnv.js';
 import express from 'express';
 import cors from 'cors';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import publicRoutes from './routes/public.js';
@@ -9,6 +10,22 @@ import { useMemory, getSupabaseStatus } from './lib/supabase.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function resolveFrontendDistPath() {
+  const candidates = [
+    path.join(__dirname, '..', '..', 'frontend', 'build'),
+    path.join(process.cwd(), 'frontend', 'build'),
+    path.join(process.cwd(), '..', 'frontend', 'build')
+  ];
+
+  for (const candidate of candidates) {
+    if (fs.existsSync(path.join(candidate, 'index.html'))) {
+      return candidate;
+    }
+  }
+
+  return candidates[0];
+}
 
 const app = express();
 const port = Number(process.env.PORT || 3001);
@@ -42,8 +59,15 @@ app.use(express.json({ limit: '1mb' }));
 
 // Servir archivos estáticos del frontend en producción
 if (process.env.NODE_ENV === 'production') {
-  const frontendDistPath = path.join(__dirname, '..', 'frontend', 'build');
+  const frontendDistPath = resolveFrontendDistPath();
+  const indexExists = fs.existsSync(path.join(frontendDistPath, 'index.html'));
   console.log('Frontend build path:', frontendDistPath);
+  console.log('Frontend index.html found:', indexExists);
+  if (!indexExists) {
+    console.error(
+      'No se encontró frontend/build/index.html. Ejecuta "npm run build" en la raíz del proyecto antes de iniciar.'
+    );
+  }
   
   // Servir archivos estáticos
   app.use(express.static(frontendDistPath, {
@@ -68,7 +92,7 @@ app.use('/api/admin', adminRoutes);
 
 // SPA fallback - servir index.html para rutas que no son API (después de las rutas de API)
 if (process.env.NODE_ENV === 'production') {
-  const frontendDistPath = path.join(__dirname, '..', 'frontend', 'build');
+  const frontendDistPath = resolveFrontendDistPath();
   app.get('*', (req, res) => {
     if (!req.path.startsWith('/api')) {
       res.sendFile(path.join(frontendDistPath, 'index.html'), (err) => {
