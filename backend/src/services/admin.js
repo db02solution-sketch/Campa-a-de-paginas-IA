@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { getStore, supabase, useMemory } from './lib/supabase.js';
+import { getStore, supabase, useMemory } from '../lib/supabase.js';
 
 export async function getAdminByEmail(email) {
   if (useMemory) {

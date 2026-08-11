@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { getCampaignBySlug } from './services/campaigns.js';
-import { createLeadWithProposal, createAgencyInquiry } from './services/leads.js';
-import { getAvailableNumbers } from './services/numbers.js';
+import { getCampaignBySlug } from '../services/campaigns.js';
+import { createLeadWithProposal, createAgencyInquiry } from '../services/leads.js';
+import { getAvailableNumbers } from '../services/numbers.js';
 
 const router = Router();
 

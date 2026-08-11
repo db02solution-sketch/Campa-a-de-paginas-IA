@@ -1,4 +1,4 @@
-import { verifyAdminToken } from './services/admin.js';
+import { verifyAdminToken } from '../services/admin.js';
 
 export function requireAdmin(req, res, next) {
   const token = process.env.ADMIN_TOKEN || 'dev-admin-token';
