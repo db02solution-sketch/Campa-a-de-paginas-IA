@@ -9,9 +9,7 @@ async function loadPDFJS() {
       pdfjsLib = pdfjs;
       
       // Configurar el worker de PDF.js usando el archivo local en static
-      // Esto evita problemas con CDNs
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-      console.log('PDF.js worker configured to use local file');
     }
   }
   return pdfjsLib;
@@ -21,32 +19,23 @@ async function loadPDFJS() {
  * Extrae texto completo de un archivo PDF
  */
 export async function extractTextFromPDF(file) {
-  console.log('Loading PDF.js library...');
   const pdfjs = await loadPDFJS();
   if (!pdfjs) {
     throw new Error('PDF.js not available');
   }
   
-  console.log('Reading file as array buffer...');
   const arrayBuffer = await file.arrayBuffer();
-  console.log('Array buffer size:', arrayBuffer.length);
-  
-  console.log('Loading PDF document...');
   const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
-  console.log('PDF loaded successfully, pages:', pdf.numPages);
   
   let fullText = '';
   
   for (let i = 1; i <= pdf.numPages; i++) {
-    console.log(`Processing page ${i} of ${pdf.numPages}...`);
     const page = await pdf.getPage(i);
     const textContent = await page.getTextContent();
     const pageText = textContent.items.map(item => item.str).join(' ');
     fullText += pageText + '\n';
-    console.log(`Page ${i} text length:`, pageText.length);
   }
   
-  console.log('Total extracted text length:', fullText.length);
   return fullText;
 }
 
@@ -154,13 +143,8 @@ export async function processPDFFile(file) {
   }
   
   try {
-    console.log('Starting PDF processing for:', file.name);
     const text = await extractTextFromPDF(file);
-    console.log('Extracted text length:', text.length);
-    console.log('Extracted text preview:', text.substring(0, 200));
-    
     const personalData = extractPersonalData(text);
-    console.log('Extracted personal data:', personalData);
     
     return {
       success: true,
@@ -169,7 +153,6 @@ export async function processPDFFile(file) {
       filename: file.name
     };
   } catch (error) {
-    console.error('PDF processing error:', error);
     return {
       success: false,
       error: error.message,
