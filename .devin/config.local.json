@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Exec(Invoke-RestMethod)",
+      "Exec(24ac23eb-bf51-4f12-b809-033dcb412cf0)",
+      "Exec(taskkill)",
+      "Exec(npm run)",
+      "Exec(netstat)",
+      "Exec(findstr)",
+      "Exec(Get-Process node)"
+    ]
+  }
+}
