@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite dev --port 5173",
     "build": "vite build",
+    "postbuild": "npm install --omit=dev --prefix ../backend",
     "preview": "vite preview",
+    "prestart": "npm install --omit=dev --prefix ../backend",
     "start": "node ../backend/src/index.js",
-    "render:build": "npm install && npm run build && npm install --prefix ../backend"
+    "render:build": "npm install && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
