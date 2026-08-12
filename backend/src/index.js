@@ -28,35 +28,27 @@ function resolveFrontendDistPath() {
   return candidates[0];
 }
 
-const app = express();
-const port = Number(process.env.PORT || 3001);
 const origins = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:5174,http://localhost:5175')
   .split(',')
   .map((o) => o.trim())
   .filter(Boolean);
 
-app.use(
-  cors({
-    origin: function(origin, callback) {
-      // Permitir requests sin origin (como mobile apps, curl, etc.)
-      if (!origin) return callback(null, true);
-      
-      // Permitir orígenes configurados
-      if (origins.includes(origin)) {
-        callback(null, true);
-      } else {
-        // En desarrollo, permitir cualquier origen
-        if (process.env.NODE_ENV !== 'production') {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      }
-    },
-    credentials: true
-  })
-);
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (origins.includes('*') || origins.includes(origin)) return callback(null, true);
+    if (process.env.NODE_ENV !== 'production') return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
+};
+
+const app = express();
+const port = Number(process.env.PORT || 3001);
 app.use(express.json({ limit: '1mb' }));
+
+// CORS solo en API; los assets estáticos se sirven same-origin sin validación CORS
+app.use('/api', cors(corsOptions));
 
 // Servir archivos estáticos del frontend en producción
 if (process.env.NODE_ENV === 'production') {
