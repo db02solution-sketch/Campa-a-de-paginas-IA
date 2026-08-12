@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 5173",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "postbuild": "npm install --omit=dev --prefix ../backend",
     "preview": "vite preview",
     "prestart": "npm install --omit=dev --prefix ../backend",

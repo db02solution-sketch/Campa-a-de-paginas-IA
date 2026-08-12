@@ -1,14 +1,28 @@
-function resolveApiUrl() {
-  const configured = import.meta.env.VITE_API_URL;
-  if (configured) return configured.replace(/\/$/, '');
-  // En producción el backend sirve la API en el mismo dominio
-  return import.meta.env.PROD ? '' : 'http://localhost:3001';
+function isLocalHost(url) {
+  return /localhost|127\.0\.0\.1/i.test(url);
 }
 
-const API_URL = resolveApiUrl();
+function getApiUrl() {
+  const configured = (import.meta.env.VITE_API_URL || '').trim();
+
+  if (typeof window !== 'undefined') {
+    const { protocol, hostname, port } = window.location;
+    const onLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+    if (!onLocalhost) {
+      if (configured && !isLocalHost(configured)) {
+        return configured.replace(/\/$/, '');
+      }
+      return `${protocol}//${hostname}${port ? `:${port}` : ''}`;
+    }
+  }
+
+  if (configured) return configured.replace(/\/$/, '');
+  return 'http://localhost:3001';
+}
 
 async function request(path, options = {}) {
-  const res = await fetch(`${API_URL}${path}`, {
+  const res = await fetch(`${getApiUrl()}${path}`, {
     headers: {
       'Content-Type': 'application/json',
       ...(options.headers || {})

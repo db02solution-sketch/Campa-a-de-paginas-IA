@@ -37,6 +37,12 @@ const corsOptions = {
   origin(origin, callback) {
     if (!origin) return callback(null, true);
     if (origins.includes('*') || origins.includes(origin)) return callback(null, true);
+    try {
+      const { hostname } = new URL(origin);
+      if (hostname.endsWith('.onrender.com')) return callback(null, true);
+    } catch {
+      // ignore invalid origin
+    }
     if (process.env.NODE_ENV !== 'production') return callback(null, true);
     callback(new Error('Not allowed by CORS'));
   },

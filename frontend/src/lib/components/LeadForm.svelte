@@ -56,7 +56,7 @@
   });
 
   $effect(() => {
-    if (form.number_mode === 'pick') {
+    if (form.number_mode === 'pick' && campaign?.slug) {
       void loadNumbers();
     }
   });
