@@ -1,4 +1,11 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+function resolveApiUrl() {
+  const configured = import.meta.env.VITE_API_URL;
+  if (configured) return configured.replace(/\/$/, '');
+  // En producción el backend sirve la API en el mismo dominio
+  return import.meta.env.PROD ? '' : 'http://localhost:3001';
+}
+
+const API_URL = resolveApiUrl();
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_URL}${path}`, {
